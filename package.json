@@ -1,7 +1,7 @@
 {
   "name": "@nartc/tailwind-schematics",
   "version": "0.0.0-development",
-  "description": "A blank schematics",
+  "description": "A schematic that adds TailwindCSS to AngularCLI applications",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*.spec.js",
