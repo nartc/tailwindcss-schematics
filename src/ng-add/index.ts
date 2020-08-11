@@ -1,9 +1,6 @@
-import { chain, Rule, TaskId, Tree } from '@angular-devkit/schematics';
+import { chain, Rule, TaskId } from '@angular-devkit/schematics';
 import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schematics/tasks';
 import { addPackageJsonDependency, NodeDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
-import { Observable, of } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
-import { getLatestNodeVersion, NpmRegistryPackage } from '../utils/npmjs.util';
 import { Schema } from './schema';
 
 function addPackageJsonDependencies(options: Schema): Rule {
@@ -22,22 +19,20 @@ function addPackageJsonDependencies(options: Schema): Rule {
     deps.push(`postcss-${ options.cssFlavor }`);
   }
 
-  // @ts-ignore
-  return (tree, _context): Observable<Tree> => {
-    return of(...deps).pipe(
-      concatMap(getLatestNodeVersion),
-      map(({ name, version }: NpmRegistryPackage) => {
-        const nodeDependency: NodeDependency = {
-          name,
-          version,
-          type: NodeDependencyType.Dev,
-          overwrite: false
-        };
-        addPackageJsonDependency(tree, nodeDependency);
-        _context.logger.info(`✅️ Added ${ name }@${ version } to devDependencies`);
-        return tree;
-      })
-    );
+  return (tree, _context) => {
+
+    deps.forEach(dep => {
+      const nodeDependency: NodeDependency = {
+        name: dep,
+        version: 'latest',
+        type: NodeDependencyType.Dev,
+        overwrite: false
+      };
+      addPackageJsonDependency(tree, nodeDependency);
+      _context.logger.info(`✅️ Added ${ dep } to devDependencies`);
+    });
+
+    return tree;
   };
 }
 
