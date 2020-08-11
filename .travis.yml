@@ -5,8 +5,6 @@ cache:
 notifications:
   email: false
 node_js: '12'
-script:
-  - yarn test
 
 jobs:
   include:
@@ -14,6 +12,7 @@ jobs:
       name: npm_release
       node_js: '12'
       before_script:
+        - yarn test
         - yarn build
       if: (branch = master OR branch = next) AND env(TRAVIS_PULL_REQUEST) IS false
       script: yarn semantic-release
