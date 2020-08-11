@@ -1,19 +1,23 @@
 {
-  "name": "tailwind-schematics",
+  "name": "@nartc/tailwind-schematics",
   "version": "0.0.0",
   "description": "A blank schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npm run build && jasmine src/**/*_spec.js",
-    "clean": "git checkout HEAD -- sandbox && git clean -f -d sandbox",
-    "link:schematic": "yarn link && cd sandbox && yarn link \"tailwind-schematics\"",
-    "sandbox:ng-add": "cd sandbox && ng g tailwind-schematics:ng-add",
+    "test": "npm run build && jasmine src/**/*.spec.js",
     "schematics": "npx @angular-devkit/schematics-cli .:ng-add"
   },
   "keywords": [
+    "tailwindcss",
+    "angular",
+    "cli",
     "schematics"
   ],
-  "author": "",
+  "author": "Chau Tran",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nartc/tailwindcss-schematics.git"
+  },
   "license": "MIT",
   "schematics": "./src/collection.json",
   "dependencies": {
