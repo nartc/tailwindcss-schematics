@@ -1,0 +1,25 @@
+const purgecss = require('@fullhuman/postcss-purgecss');
+
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.<%= cssFlavor %>$/,
+        loader: 'postcss-loader',
+        options: {
+          ident: 'postcss',<% if(cssFlavor !== 'css') {%>
+          syntax: 'postcss-<%= cssFlavor %>',<% } %>
+          plugins: () => [
+            require('postcss-import'),
+            require('tailwindcss')('<%= configDirectory %>/<%= tailwindConfigFileName %>.js'),
+            require('autoprefixer'),
+            purgecss({
+              content: ['./**/*.html', './**/*.ts', './**/*.<%= cssFlavor %>'],
+              defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+            }),
+          ]
+        }
+      }
+    ]
+  }
+};

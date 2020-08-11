@@ -5,6 +5,11 @@
       "description": "Add TailwindCSS to a new AngularCLI project",
       "factory": "./ng-add/index",
       "schema": "./ng-add/schema.json"
+    },
+    "ng-add-setup-project": {
+      "description": "Setup TailwindCSS and CustomWebpack",
+      "factory": "./ng-add/setup-project",
+      "schema": "./ng-add/schema.json"
     }
   }
 }

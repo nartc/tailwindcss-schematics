@@ -5,6 +5,9 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*_spec.js",
+    "clean": "git checkout HEAD -- sandbox && git clean -f -d sandbox",
+    "link:schematic": "yarn link && cd sandbox && yarn link \"tailwind-schematics\"",
+    "sandbox:ng-add": "cd sandbox && ng g tailwind-schematics:ng-add",
     "schematics": "npx @angular-devkit/schematics-cli .:ng-add"
   },
   "keywords": [
@@ -16,11 +19,14 @@
   "dependencies": {
     "@angular-devkit/core": "10.0.5",
     "@angular-devkit/schematics": "10.0.5",
+    "@angular/cdk": "^10.1.3",
+    "@schematics/angular": "^10.0.5",
+    "rxjs": "^6.6.2",
     "typescript": "3.9.7"
   },
   "devDependencies": {
-    "@types/node": "14.0.27",
     "@types/jasmine": "3.5.12",
+    "@types/node": "14.0.27",
     "jasmine": "3.6.1"
   }
 }
