@@ -50,7 +50,7 @@
       }
     },
     "configDirectory": {
-      "x-prompt": "Where would you like to store the configuration files?",
+      "x-prompt": "Where would you like to store the configuration files (prefix with ./)?",
       "type": "string",
       "default": ".",
       "description": "Directory that contains TailwindCSS and Webpack configs"

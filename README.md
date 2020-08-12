@@ -23,6 +23,9 @@ ng add @nartc/tailwind-schematics
 |usePurgeCss|boolean|true|Setup PurgeCSS in Production build|
 |cssFlavor|string|css|The CSS flavor the project is using|
 
+#### Note
+Please add `./` when you provide a different value for `configDirectory`.
+
 ### Dependencies
 
 The schematic will add the following packages to `devDependencies` and install:
