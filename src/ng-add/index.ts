@@ -1,11 +1,6 @@
 import { chain, Rule, TaskId } from '@angular-devkit/schematics';
 import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schematics/tasks';
-import {
-  addPackageJsonDependency,
-  NodeDependency,
-  NodeDependencyType,
-  removePackageJsonDependency
-} from '@schematics/angular/utility/dependencies';
+import { addPackageJsonDependency, NodeDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import { of } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { Schema } from './schema';
@@ -64,22 +59,12 @@ function setupProject(options: Schema): Rule {
   };
 }
 
-function removeDependency(): Rule {
-  return (tree, _context) => {
-    // Remove @nartc/tailwind-schematics from dependencies
-    _context.logger.info(`✅️ Removed @nartc/tailwind-schematics from ${ NodeDependencyType.Default }`);
-    removePackageJsonDependency(tree, '@nartc/tailwind-schematics');
-    return tree;
-  };
-}
-
 export default function (options: Schema): Rule {
   return (tree, _context) => {
     return chain([
       addPackageJsonDependencies(options),
       installDependencies(),
       setupProject(options),
-      removeDependency()
     ])(tree, _context);
   };
 }

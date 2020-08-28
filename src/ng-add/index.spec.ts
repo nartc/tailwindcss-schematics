@@ -61,7 +61,6 @@ describe('ng add function', () => {
     defaultPackages.forEach(pkg => {
       expect(packageJson).toContain(pkg);
     });
-    expect(packageJson).not.toContain('@nartc/tailwind-schematics');
   }
 
   it('should add proper packages to devDependencies with default options', async () => {
