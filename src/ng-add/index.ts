@@ -1,6 +1,11 @@
 import { chain, Rule, TaskId } from '@angular-devkit/schematics';
 import { NodePackageInstallTask, RunSchematicTask } from '@angular-devkit/schematics/tasks';
-import { addPackageJsonDependency, NodeDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
+import {
+  addPackageJsonDependency,
+  NodeDependency,
+  NodeDependencyType,
+  removePackageJsonDependency
+} from '@schematics/angular/utility/dependencies';
 import { Schema } from './schema';
 
 function addPackageJsonDependencies(options: Schema): Rule {
@@ -24,13 +29,16 @@ function addPackageJsonDependencies(options: Schema): Rule {
     deps.forEach(dep => {
       const nodeDependency: NodeDependency = {
         name: dep,
-        version: 'latest',
+        version: '0.0.0',
         type: NodeDependencyType.Dev,
         overwrite: false
       };
       addPackageJsonDependency(tree, nodeDependency);
       _context.logger.info(`✅️ Added ${ dep } to devDependencies`);
     });
+
+    // Remove @nartc/tailwind-schematics from dependencies
+    removePackageJsonDependency(tree, '@nartc/tailwind-schematics');
 
     return tree;
   };
