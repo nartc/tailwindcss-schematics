@@ -27,7 +27,7 @@ function addPackageJsonDependencies(options: Schema): Rule {
     deps.push(`postcss-${ options.cssFlavor }`);
   }
 
-  return (tree, _context) => {
+  return (tree, _context): any => {
     return of(...deps).pipe(
       concatMap(dep => getLatestNodeVersion(dep)),
       map(({ name, version }: NodePackage) => {
