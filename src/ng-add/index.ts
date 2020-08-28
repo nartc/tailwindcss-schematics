@@ -6,7 +6,10 @@ import {
   NodeDependencyType,
   removePackageJsonDependency
 } from '@schematics/angular/utility/dependencies';
+import { of } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
 import { Schema } from './schema';
+import { getLatestNodeVersion, NodePackage } from './utils';
 
 function addPackageJsonDependencies(options: Schema): Rule {
   const deps = [
@@ -25,22 +28,23 @@ function addPackageJsonDependencies(options: Schema): Rule {
   }
 
   return (tree, _context) => {
-
-    deps.forEach(dep => {
-      const nodeDependency: NodeDependency = {
-        name: dep,
-        version: '0.0.0',
-        type: NodeDependencyType.Dev,
-        overwrite: false
-      };
-      addPackageJsonDependency(tree, nodeDependency);
-      _context.logger.info(`✅️ Added ${ dep } to devDependencies`);
-    });
-
-    // Remove @nartc/tailwind-schematics from dependencies
-    removePackageJsonDependency(tree, '@nartc/tailwind-schematics');
-
-    return tree;
+    return of(...deps).pipe(
+      concatMap(dep => getLatestNodeVersion(dep)),
+      map(({ name, version }: NodePackage) => {
+        _context.logger.info(`✅️ Added ${ name }@${ version } to ${ NodeDependencyType.Dev }`);
+        const nodeDependency: NodeDependency = {
+          name,
+          version,
+          type: NodeDependencyType.Dev,
+          overwrite: false
+        };
+        addPackageJsonDependency(tree, nodeDependency);
+        // Remove @nartc/tailwind-schematics from dependencies
+        _context.logger.info(`✅️ Removed @nartc/tailwind-schematics from ${ NodeDependencyType.Default }`);
+        removePackageJsonDependency(tree, '@nartc/tailwind-schematics');
+        return tree;
+      })
+    );
   };
 }
 
