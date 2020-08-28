@@ -28,6 +28,9 @@ function addPackageJsonDependencies(options: Schema): Rule {
   }
 
   return (tree, _context): any => {
+    // Remove @nartc/tailwind-schematics from dependencies
+    _context.logger.info(`✅️ Removed @nartc/tailwind-schematics from ${ NodeDependencyType.Default }`);
+    removePackageJsonDependency(tree, '@nartc/tailwind-schematics');
     return of(...deps).pipe(
       concatMap(dep => getLatestNodeVersion(dep)),
       map(({ name, version }: NodePackage) => {
@@ -39,9 +42,6 @@ function addPackageJsonDependencies(options: Schema): Rule {
           overwrite: false
         };
         addPackageJsonDependency(tree, nodeDependency);
-        // Remove @nartc/tailwind-schematics from dependencies
-        _context.logger.info(`✅️ Removed @nartc/tailwind-schematics from ${ NodeDependencyType.Default }`);
-        removePackageJsonDependency(tree, '@nartc/tailwind-schematics');
         return tree;
       })
     );
