@@ -24,6 +24,15 @@
   "publishConfig": {
     "access": "public"
   },
+  "release": {
+    "branches": [
+      "master",
+      {
+        "name": "next",
+        "prerelease": true
+      }
+    ]
+  },
   "schematics": "./src/collection.json",
   "dependencies": {
     "@angular-devkit/core": "10.0.8",
