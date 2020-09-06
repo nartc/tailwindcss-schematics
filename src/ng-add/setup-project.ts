@@ -34,7 +34,7 @@ function updateAngularJson(options: Schema): Rule {
       browserTarget.builder = '@angular-builders/custom-webpack:browser';
       browserTarget.options = {
         customWebpackConfig: {
-          path: './webpack.config.js'
+          path: 'webpack.config.js'
         },
         ...browserTarget.options as any
       };

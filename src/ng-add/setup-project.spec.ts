@@ -71,7 +71,7 @@ describe('setup-project', () => {
     const tree = await schematicRunner.runSchematicAsync('ng-add-setup-project', options, appTree).toPromise();
     const angularJson = tree.readContent('/angular.json');
     expect(angularJson).toContain('customWebpackConfig');
-    expect(angularJson).toContain('./webpack.config.js');
+    expect(angularJson).toContain('webpack.config.js');
   });
 
   it('should include Tailwind imports in main styles', async () => {
