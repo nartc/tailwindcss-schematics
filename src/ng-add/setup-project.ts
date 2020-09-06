@@ -1,4 +1,4 @@
-import { normalize, strings } from '@angular-devkit/core';
+import { normalize } from '@angular-devkit/core';
 import { apply, applyTemplates, chain, mergeWith, move, Rule, url } from '@angular-devkit/schematics';
 import { getProjectFromWorkspace, getProjectStyleFile, getTargetsByBuilderName } from '@angular/cdk/schematics';
 import { InsertChange } from '@schematics/angular/utility/change';
@@ -10,13 +10,9 @@ function addConfigFiles(options: Schema): Rule {
   return (tree, context) => {
     const templateSource = apply(url('./files'), [
       applyTemplates({
-        dasherize: strings.dasherize,
         cssFlavor: options.cssFlavor,
-        usePurge: options.usePurgeCss,
-        tailwindConfigFileName: options.tailwindConfigFileName,
-        configDirectory: options.configDirectory
       }),
-      move(normalize(options.configDirectory))
+      move(normalize('./'))
     ]);
 
     return mergeWith(templateSource)(tree, context);
@@ -24,8 +20,6 @@ function addConfigFiles(options: Schema): Rule {
 }
 
 function updateAngularJson(options: Schema): Rule {
-  const customWebpackConfigPrefix = options.configDirectory === '.' ? '' : (options.configDirectory.substring(2) + '/');
-  const webpackConfigPath = `${ customWebpackConfigPrefix }/webpack.config.js`;
   return (tree, context) => {
     const workspace = getWorkspace(tree);
     const project = getProjectFromWorkspace(workspace, options.project);
@@ -40,7 +34,7 @@ function updateAngularJson(options: Schema): Rule {
       browserTarget.builder = '@angular-builders/custom-webpack:browser';
       browserTarget.options = {
         customWebpackConfig: {
-          path: webpackConfigPath
+          path: './webpack.config.js'
         },
         ...browserTarget.options as any
       };
@@ -73,7 +67,6 @@ function updateProjectStylesFile(options: Schema): Rule {
 function getTailwindImports(): string {
   return `
 @import 'tailwindcss/base';
-@import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
 `;

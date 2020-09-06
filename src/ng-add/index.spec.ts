@@ -33,9 +33,6 @@ describe('ng add function', () => {
     options = {
       cssFlavor: 'css',
       project: 'bar',
-      usePurgeCss: true,
-      configDirectory: '.',
-      tailwindConfigFileName: 'tailwind.config'
     };
     schematicRunner = new SchematicTestRunner('tailwind-schematics', collectionPath);
     appTree = await schematicRunner
@@ -63,14 +60,6 @@ describe('ng add function', () => {
   }
 
   it('should add proper packages to devDependencies with default options', async () => {
-    const tree = await schematicRunner.runSchematicAsync('ng-add', options, appTree).toPromise();
-    const packageJson = tree.readContent('/package.json');
-    expect(packageJson).toBeTruthy();
-    assertDefaultPackages(packageJson);
-  });
-
-  it('should add proper packages to devDependencies without purgeCSS', async () => {
-    options.usePurgeCss = false;
     const tree = await schematicRunner.runSchematicAsync('ng-add', options, appTree).toPromise();
     const packageJson = tree.readContent('/package.json');
     expect(packageJson).toBeTruthy();

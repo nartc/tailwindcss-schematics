@@ -31,9 +31,6 @@ describe('setup-project', () => {
     options = {
       cssFlavor: 'css',
       project: 'bar',
-      usePurgeCss: true,
-      configDirectory: '.',
-      tailwindConfigFileName: 'tailwind.config'
     };
     schematicRunner = new SchematicTestRunner('tailwind-schematics', collectionPath);
     appTree = await schematicRunner
@@ -56,11 +53,10 @@ describe('setup-project', () => {
 
   it('should create proper config files', async () => {
     const tree = await schematicRunner.runSchematicAsync('ng-add-setup-project', options, appTree).toPromise();
-    const configDir = tree.getDir(options.configDirectory);
-    expect(configDir).toBeTruthy();
+    const configDir = tree.getDir('./');
     const configFiles = configDir.subfiles;
     [
-      `${ options.tailwindConfigFileName }.js`,
+      'tailwind.config.js',
       'webpack.config.js',
     ].forEach((configFile, index) => {
       if (index === 0) {
@@ -71,30 +67,11 @@ describe('setup-project', () => {
     });
   });
 
-  it('should create proper config files without purgeCSS', async () => {
-    options.usePurgeCss = false;
-    const tree = await schematicRunner.runSchematicAsync('ng-add-setup-project', options, appTree).toPromise();
-    const configDir = tree.getDir(options.configDirectory);
-    expect(configDir).toBeTruthy();
-    const configFiles = configDir.subfiles;
-    [
-      `${ options.tailwindConfigFileName }.js`,
-      'webpack.config.js'
-    ].forEach((configFile, index) => {
-      if (index === 0) {
-        const tailwindConfigContent = tree.readContent(configFile);
-        expect(tailwindConfigContent).not.toContain('purge: ');
-      }
-      expect(configFiles.includes(configFile as PathFragment)).toBeTrue();
-    });
-  });
-
   it('should use custom webpack in angular.json', async () => {
     const tree = await schematicRunner.runSchematicAsync('ng-add-setup-project', options, appTree).toPromise();
     const angularJson = tree.readContent('/angular.json');
     expect(angularJson).toContain('customWebpackConfig');
-    const configPath = options.configDirectory === '.' ? '' : (options.configDirectory.substring(2) + '/');
-    expect(angularJson).toContain(`${ configPath }webpack.config.js`);
+    expect(angularJson).toContain('./webpack.config.js');
   });
 
   it('should include Tailwind imports in main styles', async () => {
@@ -102,7 +79,6 @@ describe('setup-project', () => {
     const styleContent = tree.readContent('/projects/bar/src/styles.css');
     [
       '@import \'tailwindcss/base\'',
-      '@import \'tailwindcss/components\'',
       '@import \'tailwindcss/utilities\'',
     ].forEach(i => {
       expect(styleContent).toContain(i);
