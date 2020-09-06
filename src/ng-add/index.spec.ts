@@ -23,7 +23,6 @@ const defaultAppOptions = {
 
 
 const defaultPackages = ['@angular-builders/custom-webpack', 'postcss-import', 'postcss-loader', 'tailwindcss'];
-const purgePackage = '@fullhuman/postcss-purgecss';
 
 describe('ng add function', () => {
   let appTree: UnitTestTree;
@@ -68,7 +67,6 @@ describe('ng add function', () => {
     const packageJson = tree.readContent('/package.json');
     expect(packageJson).toBeTruthy();
     assertDefaultPackages(packageJson);
-    expect(packageJson).toContain(purgePackage);
   });
 
   it('should add proper packages to devDependencies without purgeCSS', async () => {
@@ -77,7 +75,6 @@ describe('ng add function', () => {
     const packageJson = tree.readContent('/package.json');
     expect(packageJson).toBeTruthy();
     assertDefaultPackages(packageJson);
-    expect(packageJson).not.toContain(purgePackage);
   });
 
   it('should add proper packages to devDependencies with each cssFlavor', async () => {

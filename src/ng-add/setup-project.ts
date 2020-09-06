@@ -8,11 +8,11 @@ import { Schema } from './schema';
 
 function addConfigFiles(options: Schema): Rule {
   return (tree, context) => {
-    const templateUrl = options.usePurgeCss ? './files/with-purge' : './files/without-purge';
-    const templateSource = apply(url(templateUrl), [
+    const templateSource = apply(url('./files'), [
       applyTemplates({
         dasherize: strings.dasherize,
         cssFlavor: options.cssFlavor,
+        usePurge: options.usePurgeCss,
         tailwindConfigFileName: options.tailwindConfigFileName,
         configDirectory: options.configDirectory
       }),
@@ -25,10 +25,7 @@ function addConfigFiles(options: Schema): Rule {
 
 function updateAngularJson(options: Schema): Rule {
   const customWebpackConfigPrefix = options.configDirectory === '.' ? '' : (options.configDirectory.substring(2) + '/');
-  const [webpackDevConfigPath, webpackProdConfigPath = webpackDevConfigPath]: [string, string?] = [
-    `${ customWebpackConfigPrefix }${ options.usePurgeCss ? 'webpack-dev.config.js' : 'webpack.config.js' }`,
-    options.usePurgeCss ? `${ customWebpackConfigPrefix }webpack-prod.config.js` : undefined
-  ];
+  const webpackConfigPath = `${ customWebpackConfigPrefix }/webpack.config.js`;
   return (tree, context) => {
     const workspace = getWorkspace(tree);
     const project = getProjectFromWorkspace(workspace, options.project);
@@ -43,20 +40,10 @@ function updateAngularJson(options: Schema): Rule {
       browserTarget.builder = '@angular-builders/custom-webpack:browser';
       browserTarget.options = {
         customWebpackConfig: {
-          path: webpackDevConfigPath
+          path: webpackConfigPath
         },
         ...browserTarget.options as any
       };
-      if (options.usePurgeCss) {
-        browserTarget.configurations = {
-          production: {
-            customWebpackConfig: {
-              path: webpackProdConfigPath
-            },
-            ...browserTarget.configurations?.production as any ?? {}
-          }
-        };
-      }
     }
 
     return updateWorkspace(workspace)(tree, context);

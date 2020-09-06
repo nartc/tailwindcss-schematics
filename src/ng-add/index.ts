@@ -14,10 +14,6 @@ function addPackageJsonDependencies(options: Schema): Rule {
     '@angular-builders/custom-webpack'
   ];
 
-  if (options.usePurgeCss) {
-    deps.push('@fullhuman/postcss-purgecss');
-  }
-
   if (options.cssFlavor !== 'css') {
     deps.push(`postcss-${ options.cssFlavor }`);
   }

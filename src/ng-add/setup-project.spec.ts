@@ -61,9 +61,12 @@ describe('setup-project', () => {
     const configFiles = configDir.subfiles;
     [
       `${ options.tailwindConfigFileName }.js`,
-      'webpack-dev.config.js',
-      'webpack-prod.config.js'
-    ].forEach(configFile => {
+      'webpack.config.js',
+    ].forEach((configFile, index) => {
+      if (index === 0) {
+        const tailwindConfigContent = tree.readContent(configFile);
+        expect(tailwindConfigContent).toContain('purge: ');
+      }
       expect(configFiles.includes(configFile as PathFragment)).toBeTrue();
     });
   });
@@ -77,22 +80,16 @@ describe('setup-project', () => {
     [
       `${ options.tailwindConfigFileName }.js`,
       'webpack.config.js'
-    ].forEach(configFile => {
+    ].forEach((configFile, index) => {
+      if (index === 0) {
+        const tailwindConfigContent = tree.readContent(configFile);
+        expect(tailwindConfigContent).not.toContain('purge: ');
+      }
       expect(configFiles.includes(configFile as PathFragment)).toBeTrue();
     });
   });
 
   it('should use custom webpack in angular.json', async () => {
-    const tree = await schematicRunner.runSchematicAsync('ng-add-setup-project', options, appTree).toPromise();
-    const angularJson = tree.readContent('/angular.json');
-    expect(angularJson).toContain('customWebpackConfig');
-    const configPath = options.configDirectory === '.' ? '' : (options.configDirectory.substring(2) + '/');
-    expect(angularJson).toContain(`${ configPath }webpack-dev.config.js`);
-    expect(angularJson).toContain(`${ configPath }webpack-prod.config.js`);
-  });
-
-  it('should use custom webpack in angular.json without purgeCSS', async () => {
-    options.usePurgeCss = false;
     const tree = await schematicRunner.runSchematicAsync('ng-add-setup-project', options, appTree).toPromise();
     const angularJson = tree.readContent('/angular.json');
     expect(angularJson).toContain('customWebpackConfig');
