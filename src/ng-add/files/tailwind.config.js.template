@@ -6,7 +6,7 @@ module.exports = (isProd) => ({
     },
     purge: {
       enabled: isProd,
-      content: ['./*.html', './*.ts']
+      content: ['**/*.html', '**/*.ts']
     },
     theme: {}
 });
