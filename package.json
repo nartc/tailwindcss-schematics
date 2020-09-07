@@ -3,6 +3,8 @@
   "version": "0.0.0-development",
   "description": "A schematic that adds TailwindCSS to AngularCLI applications",
   "scripts": {
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors init",
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*.spec.js",
     "schematics": "npx @angular-devkit/schematics-cli .:ng-add",
@@ -45,6 +47,7 @@
   "devDependencies": {
     "@types/jasmine": "3.5.14",
     "@types/node": "14.6.4",
+    "all-contributors-cli": "^6.17.2",
     "commitizen": "4.2.1",
     "cz-conventional-changelog": "3.3.0",
     "jasmine": "3.6.1",
