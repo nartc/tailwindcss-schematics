@@ -23,7 +23,6 @@ const defaultAppOptions = {
 
 
 const defaultPackages = ['@angular-builders/custom-webpack', 'postcss-import', 'postcss-loader', 'tailwindcss'];
-const purgePackage = '@fullhuman/postcss-purgecss';
 
 describe('ng add function', () => {
   let appTree: UnitTestTree;
@@ -34,9 +33,6 @@ describe('ng add function', () => {
     options = {
       cssFlavor: 'css',
       project: 'bar',
-      usePurgeCss: true,
-      configDirectory: '.',
-      tailwindConfigFileName: 'tailwind.config'
     };
     schematicRunner = new SchematicTestRunner('tailwind-schematics', collectionPath);
     appTree = await schematicRunner
@@ -68,16 +64,6 @@ describe('ng add function', () => {
     const packageJson = tree.readContent('/package.json');
     expect(packageJson).toBeTruthy();
     assertDefaultPackages(packageJson);
-    expect(packageJson).toContain(purgePackage);
-  });
-
-  it('should add proper packages to devDependencies without purgeCSS', async () => {
-    options.usePurgeCss = false;
-    const tree = await schematicRunner.runSchematicAsync('ng-add', options, appTree).toPromise();
-    const packageJson = tree.readContent('/package.json');
-    expect(packageJson).toBeTruthy();
-    assertDefaultPackages(packageJson);
-    expect(packageJson).not.toContain(purgePackage);
   });
 
   it('should add proper packages to devDependencies with each cssFlavor', async () => {

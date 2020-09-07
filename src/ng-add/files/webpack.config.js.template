@@ -1,0 +1,26 @@
+const merge = require('webpack-merge');
+
+module.exports = (config) => {
+  const isProd = config.mode === "production";
+  const tailwindConfig = require("./tailwind.config.js")(isProd);
+
+  return merge(config, {
+    module: {
+      rules: [
+        {
+          test: /\.<%= cssFlavor %>$/,
+          loader: 'postcss-loader',
+          options: {
+            ident: 'postcss',<% if(cssFlavor !== 'css') {%>
+            syntax: 'postcss-<%= cssFlavor %>',<% } %>
+            plugins: () => [
+              require('postcss-import'),
+              require('tailwindcss')(tailwindConfig),
+              require('autoprefixer'),
+            ]
+          }
+        }
+      ]
+    }
+  });
+};

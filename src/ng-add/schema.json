@@ -48,24 +48,6 @@
           }
         ]
       }
-    },
-    "configDirectory": {
-      "x-prompt": "Where would you like to store the configuration files (prefix with ./)?",
-      "type": "string",
-      "default": ".",
-      "description": "Directory that contains TailwindCSS and Webpack configs"
-    },
-    "tailwindConfigFileName": {
-      "x-prompt": "What would you like to call the Tailwind config file?",
-      "type": "string",
-      "default": "tailwind.config",
-      "description": "File name of TailwindCSS Config"
-    },
-    "usePurgeCss": {
-      "x-prompt": "Would you like to setup PurgeCSS?",
-      "type": "boolean",
-      "default": true,
-      "description": "Setup PurgeCSS or not"
     }
   },
   "required": [],
