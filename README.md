@@ -1,3 +1,5 @@
+# This repo has been archived in favor of [ngneat/tailwind](https://github.com/ngneat/tailwind). The npm library `@nartc/tailwind-schematics` will no longer be maintained. Please refer to `ngneat/tailwind` for updates, usage documentations, and issues.
+
 # Angular Tailwind CSS Schematics
 
 This schematic will add [TailwindCSS](https://tailwindcss.com/) to your [Angular](https://angular.io) application.
